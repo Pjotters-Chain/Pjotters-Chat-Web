@@ -17,11 +17,11 @@
     <header>
         <nav>
             <div class="logo">
-                <i class="fas fa-comments"></i>
+                <img src="images/logo kopie.png" alt="Pjotters Chat Logo" class="logo-image">
                 <h1>Pjotters Chat</h1>
             </div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
+                <li><a href="#home" class="active">Home</a></li>
                 <li><a href="#news">Nieuws</a></li>
                 <li><a href="#chat" class="auth-required">Chat</a></li>
                 <li><a href="#profile" class="auth-required">Profiel</a></li>
@@ -30,69 +30,10 @@
             </ul>
         </nav>
     </header>
-<!-- Profile Section -->
-<section id="profile" class="profile-section auth-required">
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-image-container">
-                <img id="profileImage" src="images/default-avatar.png" alt="Profiel foto">
-                <button id="changePhotoBtn" class="change-photo-btn">
-                    <i class="fas fa-camera"></i>
-                </button>
-                <input type="file" id="photoInput" accept="image/*" hidden>
-            </div>
-        </div>
 
-        <form id="profileForm" class="profile-form">
-            <div class="form-group">
-                <label for="username">Gebruikersnaam</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-
-            <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" id="status" name="status">
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" readonly>
-            </div>
-
-            <div class="profile-actions">
-                <button type="submit" class="save-btn">Opslaan</button>
-                <button type="button" id="logoutBtn" class="logout-btn">Uitloggen</button>
-            </div>
-        </form>
-
-        <div class="account-settings">
-            <h3>Account Instellingen</h3>
-            <button id="changePasswordBtn" class="settings-btn">
-                <i class="fas fa-key"></i> Wachtwoord Wijzigen
-            </button>
-            <button id="deleteAccountBtn" class="settings-btn danger">
-                <i class="fas fa-trash"></i> Account Verwijderen
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- Change Password Modal -->
-<div id="changePasswordModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Wachtwoord Wijzigen</h2>
-        <form id="changePasswordForm">
-            <input type="password" name="currentPassword" placeholder="Huidig wachtwoord" required>
-            <input type="password" name="newPassword" placeholder="Nieuw wachtwoord" required>
-            <input type="password" name="confirmPassword" placeholder="Bevestig wachtwoord" required>
-            <button type="submit">Wijzig Wachtwoord</button>
-        </form>
-    </div>
-</div>
     <main>
         <!-- Home Section -->
-        <section id="home" class="hero">
+        <section id="home" class="hero section active">
             <div class="hero-content">
                 <h2>Welkom bij Pjotters Chat</h2>
                 <p>Een veilige en gebruiksvriendelijke chat applicatie</p>
@@ -104,7 +45,7 @@
         </section>
 
         <!-- News Section -->
-        <section id="news" class="news-section">
+        <section id="news" class="news-section section">
             <h2>Laatste Nieuws</h2>
             <div class="news-grid">
                 <article class="news-card">
@@ -118,7 +59,7 @@
         </section>
 
         <!-- Chat Section -->
-        <section id="chat" class="chat-section auth-required">
+        <section id="chat" class="chat-section section auth-required">
             <div class="chat-container">
                 <div class="contacts-list">
                     <div class="search-contacts">
@@ -143,7 +84,7 @@
                 <div class="chat-messages">
                     <div class="chat-header">
                         <div class="chat-user-info">
-                            <img src="images/default-avatar.png" alt="" id="chatUserImage" class="user-avatar">
+                            <img src="images/logo kopie.png" alt="" id="chatUserImage" class="user-avatar">
                             <div class="user-details">
                                 <h3 id="chatUserName">Selecteer een chat</h3>
                                 <span id="chatUserStatus" class="user-status"></span>
@@ -166,11 +107,11 @@
         </section>
 
         <!-- Profile Section -->
-        <section id="profile" class="profile-section auth-required">
+        <section id="profile" class="profile-section section auth-required">
             <div class="profile-container">
                 <div class="profile-header">
                     <div class="profile-image-container">
-                        <img id="profileImage" src="images/default-avatar.png" alt="Profiel foto">
+                        <img id="profileImage" src="images/logo kopie.png" alt="Profiel foto">
                         <button id="changePhotoBtn" class="change-photo-btn">
                             <i class="fas fa-camera"></i>
                         </button>
@@ -272,6 +213,20 @@
         </div>
     </div>
 
+    <!-- Add Contact Modal -->
+    <div id="addContactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Zoek Contacten</h2>
+            <div class="search-box">
+                <input type="text" id="userSearch" placeholder="Zoek gebruikers...">
+            </div>
+            <div id="searchResults" class="search-results">
+                <!-- Zoekresultaten worden hier dynamisch toegevoegd -->
+            </div>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2024 Pjotters Chat. Alle rechten voorbehouden.</p>
     </footer>
@@ -281,68 +236,4 @@
     <script src="js/main.js"></script>
     <script src="js/ui-updates.js"></script>
 </body>
-    <!-- Chat Section -->
-<section id="chat" class="chat-section auth-required">
-    <div class="chat-container">
-        <!-- Contacts Sidebar -->
-        <div class="contacts-list">
-            <div class="search-contacts">
-                <input type="text" id="contactSearch" placeholder="Zoek contacten...">
-                <button id="addContactBtn"><i class="fas fa-user-plus"></i></button>
-            </div>
-            
-            <div class="contacts-tabs">
-                <button class="tab active" data-tab="chats">Chats</button>
-                <button class="tab" data-tab="contacts">Contacten</button>
-            </div>
-
-            <div id="chatsList" class="contacts-content active">
-                <!-- Chats worden hier dynamisch toegevoegd -->
-            </div>
-
-            <div id="contactsList" class="contacts-content">
-                <!-- Contacten worden hier dynamisch toegevoegd -->
-            </div>
-        </div>
-
-        <!-- Chat Messages -->
-        <div class="chat-messages">
-            <div class="chat-header">
-                <div class="chat-user-info">
-                    <img src="" alt="" id="chatUserImage" class="user-avatar">
-                    <div class="user-details">
-                        <h3 id="chatUserName"></h3>
-                        <span id="chatUserStatus" class="user-status"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="messagesContainer" class="messages">
-                <!-- Berichten worden hier dynamisch toegevoegd -->
-            </div>
-
-            <form id="messageForm" class="message-input">
-                <input type="text" name="message" placeholder="Typ een bericht..." required>
-                <button type="submit">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- Add Contact Modal -->
-<div id="addContactModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Zoek Contacten</h2>
-        <div class="search-box">
-            <input type="text" id="userSearch" placeholder="Zoek gebruikers...">
-        </div>
-        <div id="searchResults" class="search-results">
-            <!-- Zoekresultaten worden hier dynamisch toegevoegd -->
-        </div>
-    </div>
-</div>
-
 </html>
