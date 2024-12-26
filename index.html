@@ -222,4 +222,68 @@
     <script src="js/main.js"></script>
     <script src="js/ui-updates.js"></script>
 </body>
+    <!-- Chat Section -->
+<section id="chat" class="chat-section auth-required">
+    <div class="chat-container">
+        <!-- Contacts Sidebar -->
+        <div class="contacts-list">
+            <div class="search-contacts">
+                <input type="text" id="contactSearch" placeholder="Zoek contacten...">
+                <button id="addContactBtn"><i class="fas fa-user-plus"></i></button>
+            </div>
+            
+            <div class="contacts-tabs">
+                <button class="tab active" data-tab="chats">Chats</button>
+                <button class="tab" data-tab="contacts">Contacten</button>
+            </div>
+
+            <div id="chatsList" class="contacts-content active">
+                <!-- Chats worden hier dynamisch toegevoegd -->
+            </div>
+
+            <div id="contactsList" class="contacts-content">
+                <!-- Contacten worden hier dynamisch toegevoegd -->
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages">
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <img src="" alt="" id="chatUserImage" class="user-avatar">
+                    <div class="user-details">
+                        <h3 id="chatUserName"></h3>
+                        <span id="chatUserStatus" class="user-status"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="messagesContainer" class="messages">
+                <!-- Berichten worden hier dynamisch toegevoegd -->
+            </div>
+
+            <form id="messageForm" class="message-input">
+                <input type="text" name="message" placeholder="Typ een bericht..." required>
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Add Contact Modal -->
+<div id="addContactModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Zoek Contacten</h2>
+        <div class="search-box">
+            <input type="text" id="userSearch" placeholder="Zoek gebruikers...">
+        </div>
+        <div id="searchResults" class="search-results">
+            <!-- Zoekresultaten worden hier dynamisch toegevoegd -->
+        </div>
+    </div>
+</div>
+
 </html>
