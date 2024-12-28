@@ -202,3 +202,65 @@ nav {
         color: var(--text-color);
     }
 }
+
+/* Carousel Sectie */
+.carousel-section {
+    padding: 4rem 0;
+    background-color: var(--white);
+    box-shadow: var(--shadow);
+}
+
+.carousel-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.carousel-title i {
+    font-style: italic;
+    color: var(--primary-color);
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.carousel-slide {
+    display: none;
+    animation: fade 0.5s ease-in-out;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.carousel-caption {
+    text-align: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--white);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
