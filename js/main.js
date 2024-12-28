@@ -132,3 +132,27 @@ window.addEventListener('focus', () => {
 window.addEventListener('blur', () => {
     updateOnlineStatus(false);
 });
+
+function initCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Toon eerste slide
+    showSlide(0);
+
+    // Verander slide elke 5 seconden
+    setInterval(nextSlide, 5000);
+}
+
+// Start de carousel wanneer de pagina is geladen
+document.addEventListener('DOMContentLoaded', initCarousel);
