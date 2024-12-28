@@ -9,14 +9,20 @@ const firebaseConfig = {
     measurementId: "G-KJ0RQNNJS0"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase met de nieuwe Firebase 10.7.1 syntax
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+const app = initializeApp(firebaseConfig);
 
 // Handige referenties
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-const analytics = firebase.analytics();
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const analytics = getAnalytics(app);
 
 // Exporteer voor gebruik in andere bestanden
 window.firebaseInstance = {
