@@ -282,7 +282,8 @@ nav {
 
 /* Login Pagina Styling */
 .login-container {
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
+    margin-top: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,4 +335,57 @@ nav {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     text-align: center;
+}
+
+/* Chat Pagina Styling */
+.chat-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.chat-input form {
+    display: flex;
+    gap: 1rem;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+}
+
+/* Message Styling */
+.message {
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: var(--border-radius);
+    max-width: 80%;
+}
+
+.own-message {
+    background: var(--primary-color);
+    color: var(--white);
+    margin-left: auto;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.sender {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.timestamp {
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
