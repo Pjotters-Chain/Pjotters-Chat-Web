@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Pjotters Chat</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="Images/Pjotters-Chain_Logo.png">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <img src="Images/Pjotters-Chain_Logo.png" alt="Pjotters Logo" height="40">
+            </div>
+            <div class="nav-right">
+                <div class="user-info">
+                    <img id="userAvatar" src="path/to/default-avatar.png" alt="User Avatar">
+                    <span id="userName">Laden...</span>
+                </div>
+                <button id="logoutBtn" class="button button-accent">Uitloggen</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <aside class="sidebar">
+            <div class="contacts-header">
+                <h3>Contacten</h3>
+                <button id="newChatBtn" class="button button-primary">Nieuwe Chat</button>
+            </div>
+            <div class="contacts-list" id="contactsList">
+                <!-- Contacten worden hier dynamisch toegevoegd -->
+            </div>
+        </aside>
+
+        <main class="chat-main">
+            <div class="chat-header">
+                <h2 id="currentChatName">Selecteer een chat</h2>
+            </div>
+
+            <div class="messages" id="messagesList">
+                <!-- Berichten worden hier dynamisch toegevoegd -->
+            </div>
+
+            <div class="chat-input">
+                <form id="messageForm">
+                    <input type="text" id="messageInput" placeholder="Type een bericht..." disabled>
+                    <button type="submit" class="button button-primary" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ui-update.js"></script>
+</body>
+</html> 
