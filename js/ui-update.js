@@ -145,5 +145,27 @@ function formatTime(timestamp) {
     return date.toLocaleDateString();
 }
 
+function formatTimestamp(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.toDate();
+    return date.toLocaleTimeString('nl-NL', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+async function loadUserData(uid) {
+    try {
+        const doc = await db.collection('users').doc(uid).get();
+        if (doc.exists) {
+            const userData = doc.data();
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userAvatar').src = userData.photoURL || '../images/default-avatar.png';
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error);
+    }
+}
+
 // Export voor gebruik in andere bestanden
 window.UI = UI;
