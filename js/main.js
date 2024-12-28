@@ -1,158 +1,105 @@
-// Auth State Observer
-auth.onAuthStateChanged(user => {
+let currentUser = null;
+let currentChat = null;
+
+// Auth state observer
+auth.onAuthStateChanged(async (user) => {
     if (user) {
-        UI.updateAuthUI(true);
-        loadUserData(user.uid);
+        currentUser = user;
+        await loadUserData(user.uid);
         startChatListeners(user.uid);
-        updateOnlineStatus(true);
     } else {
-        UI.updateAuthUI(false);
+        window.location.href = 'login.html';
     }
 });
 
-// Event Listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Login
-    document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            document.getElementById('loginModal').style.display = 'none';
-        } catch (error) {
-            UI.showAlert(error.message);
-        }
-    });
+// Chat functionaliteit
+async function sendMessage(message) {
+    if (!currentChat || !currentUser) return;
 
-    // Register
-    document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        const username = e.target.username.value;
-        
-        try {
-            const result = await auth.createUserWithEmailAndPassword(email, password);
-            await db.collection('users').doc(result.user.uid).set({
-                username: username.toLowerCase(),
-                email: email,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: "Hey, ik gebruik Pjotters Chat!"
-            });
-            document.getElementById('registerModal').style.display = 'none';
-        } catch (error) {
-            UI.showAlert(error.message);
-        }
-    });
-
-    // Profile Update
-    document.getElementById('profileForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = {
-            username: e.target.username.value,
-            status: e.target.status.value
-        };
-        
-        try {
-            await db.collection('users').doc(auth.currentUser.uid).update(data);
-            UI.showAlert('Profiel bijgewerkt!', 'success');
-        } catch (error) {
-            UI.showAlert(error.message);
-        }
-    });
-
-    // Send Message
-    document.getElementById('messageForm')?.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = e.target.message.value;
-        const chatId = e.target.dataset.chatId;
-        
-        if (!text.trim() || !chatId) return;
-        
-        try {
-            await db.collection('messages').add({
-                text: text,
-                chatId: chatId,
-                senderID: auth.currentUser.uid,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                isRead: false
-            });
-            e.target.reset();
-        } catch (error) {
-            UI.showAlert(error.message);
-        }
-    });
-});
-
-// Helper Functions
-async function loadUserData(userId) {
     try {
-        const doc = await db.collection('users').doc(userId).get();
-        if (doc.exists) {
-            UI.updateProfileUI(doc.data());
-        }
+        await db.collection('chats').doc(currentChat).collection('messages').add({
+            text: message,
+            senderId: currentUser.uid,
+            senderName: currentUser.displayName,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
     } catch (error) {
-        UI.showAlert(error.message);
+        console.error('Error sending message:', error);
     }
 }
 
-function startChatListeners(userId) {
-    // Listen to chats
-    db.collection('chats')
-        .where('users', 'array-contains', userId)
+// Start een nieuwe chat
+async function startNewChat(otherUserId) {
+    try {
+        const chatRef = await db.collection('chats').add({
+            users: [currentUser.uid, otherUserId],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Update gebruikers' chat lijst
+        await db.collection('users').doc(currentUser.uid).update({
+            chats: firebase.firestore.FieldValue.arrayUnion(chatRef.id)
+        });
+        
+        await db.collection('users').doc(otherUserId).update({
+            chats: firebase.firestore.FieldValue.arrayUnion(chatRef.id)
+        });
+        
+        return chatRef.id;
+    } catch (error) {
+        console.error('Error starting new chat:', error);
+    }
+}
+
+// Luister naar berichten in huidige chat
+function listenToMessages(chatId) {
+    return db.collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp')
         .onSnapshot(snapshot => {
-            const chats = [];
-            snapshot.forEach(doc => {
-                chats.push({ id: doc.id, ...doc.data() });
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    displayMessage(change.doc.data());
+                }
             });
-            UI.updateChatsUI(chats);
         });
 }
 
+// Update gebruikers online status
 function updateOnlineStatus(online) {
-    if (!auth.currentUser) return;
+    if (!currentUser) return;
     
-    db.collection('users').doc(auth.currentUser.uid).update({
+    db.collection('users').doc(currentUser.uid).update({
         online: online,
         lastActive: firebase.firestore.FieldValue.serverTimestamp()
     });
 }
 
-// Window events voor online status
-window.addEventListener('beforeunload', () => {
-    updateOnlineStatus(false);
-});
+// Event listeners voor online status
+window.addEventListener('beforeunload', () => updateOnlineStatus(false));
+window.addEventListener('focus', () => updateOnlineStatus(true));
+window.addEventListener('blur', () => updateOnlineStatus(false));
 
-window.addEventListener('focus', () => {
-    updateOnlineStatus(true);
-});
-
-window.addEventListener('blur', () => {
-    updateOnlineStatus(false);
-});
-
-function initCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    let currentSlide = 0;
-
-    function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index].classList.add('active');
+// UI updates
+function displayMessage(messageData) {
+    const messagesDiv = document.getElementById('messagesList');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    
+    // Voeg extra klasse toe voor eigen berichten
+    if (messageData.senderId === currentUser.uid) {
+        messageElement.classList.add('own-message');
     }
-
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-
-    // Toon eerste slide
-    showSlide(0);
-
-    // Verander slide elke 5 seconden
-    setInterval(nextSlide, 5000);
+    
+    messageElement.innerHTML = `
+        <div class="message-content">
+            <span class="sender">${messageData.senderName}</span>
+            <p>${messageData.text}</p>
+            <span class="timestamp">${formatTimestamp(messageData.timestamp)}</span>
+        </div>
+    `;
+    
+    messagesDiv.appendChild(messageElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
-
-// Start de carousel wanneer de pagina is geladen
-document.addEventListener('DOMContentLoaded', initCarousel);
