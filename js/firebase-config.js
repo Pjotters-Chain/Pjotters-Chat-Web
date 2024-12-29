@@ -4,8 +4,8 @@ const firebaseConfig = {
     authDomain: "pjotters-chat.firebaseapp.com",
     projectId: "pjotters-chat",
     storageBucket: "pjotters-chat.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abc123def456"
+    messagingSenderId: "1066800578443",
+    appId: "1:1066800578443:web:c0a5c9b2e7d3b8f3b8d3b8"
 };
 
 // Direct initialiseren
