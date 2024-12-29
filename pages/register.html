@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registreren - Pjotters Chat</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../images/Pjotters-Chain_Logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <img src="../images/Pjotters-Chain_Logo.png" alt="Pjotters Logo" height="40">
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="login.html">Inloggen</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Registreren</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="displayName">Naam</label>
+                    <input type="text" id="displayName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mailadres</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Wachtwoord</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Bevestig wachtwoord</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="button button-primary">Registreren</button>
+            </form>
+
+            <div class="login-prompt">
+                <p>Al een account? <a href="login.html">Log hier in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 Pjotters Chat. Alle rechten voorbehouden.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/register.js"></script>
+</body>
+</html>
