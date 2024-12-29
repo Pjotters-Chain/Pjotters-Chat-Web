@@ -1,13 +1,15 @@
-/* Variabelen */
+/* Variabelen - Licht Thema */
 :root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-    --accent-color: #e74c3c;
-    --text-color: #333;
-    --background-color: #ffffff;
-    --light-bg: #f5f6fa;
-    --white: #ffffff;
-    --shadow: 0 2px 15px rgba(0,0,0,0.1);
+    --primary-color: #4A90E2;      /* Helder blauw */
+    --secondary-color: #5C6AC4;    /* Zacht paars-blauw */
+    --accent-color: #FF6B6B;       /* Zacht rood */
+    --text-color: #2D3748;         /* Donker grijs voor tekst */
+    --text-light: #718096;         /* Lichter grijs voor subtekst */
+    --background-color: #FFFFFF;    /* Wit */
+    --light-bg: #F7FAFC;           /* Heel licht grijs */
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;       /* Licht grijs voor randen */
+    --shadow: 0 2px 15px rgba(0,0,0,0.05);
     --border-radius: 8px;
     --transition: all 0.3s ease;
 }
@@ -51,6 +53,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* Navigatie Elementen */
@@ -77,17 +81,18 @@ nav {
     transition: var(--transition);
 }
 
-.nav-links a:hover {
+.nav-links a:hover, .nav-links a.active {
     color: var(--primary-color);
 }
 
 /* Knoppen */
 .button {
-    padding: 0.5rem 1.5rem;
+    padding: 0.8rem 1.5rem;
     border-radius: var(--border-radius);
+    border: none;
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
-    border: none;
 }
 
 .button-primary {
@@ -95,9 +100,17 @@ nav {
     color: var(--white);
 }
 
+.button-primary:hover {
+    background-color: #357ABD;
+}
+
 .button-accent {
     background-color: var(--accent-color);
     color: var(--white);
+}
+
+.button-accent:hover {
+    background-color: #FF5252;
 }
 
 /* Hero Sectie */
@@ -128,6 +141,7 @@ nav {
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 /* Berichten */
@@ -298,6 +312,7 @@ nav {
     box-shadow: var(--shadow);
     width: 100%;
     max-width: 400px;
+    border: 1px solid var(--border-color);
 }
 
 .login-title {
@@ -335,6 +350,12 @@ nav {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 /* Chat Pagina Styling */
@@ -367,6 +388,8 @@ nav {
     margin: 0.5rem 0;
     border-radius: var(--border-radius);
     max-width: 80%;
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
 }
 
 .own-message {
@@ -388,4 +411,11 @@ nav {
 .timestamp {
     font-size: 0.8rem;
     opacity: 0.8;
+}
+
+/* Footer */
+footer {
+    background: var(--light-bg);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-light);
 }
