@@ -179,4 +179,41 @@ function formatTimestamp(timestamp) {
         hour: '2-digit', 
         minute: '2-digit' 
     });
+}
+
+// Laad alle gebruikers
+async function loadAllUsers() {
+    try {
+        const usersSnapshot = await db.collection('users').get();
+        const users = [];
+        usersSnapshot.forEach(doc => {
+            // Voeg alleen andere gebruikers toe (niet de huidige gebruiker)
+            if (doc.id !== currentUser.uid) {
+                users.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            }
+        });
+
+        // Update contactenlijst
+        const contactsList = document.getElementById('contactsList');
+        contactsList.innerHTML = ''; // Maak lijst leeg
+
+        users.forEach(user => {
+            const userElement = document.createElement('div');
+            userElement.className = 'contact-item';
+            userElement.innerHTML = `
+                <img src="${user.photoURL || '../images/default-avatar.png'}" alt="Profile">
+                <div class="contact-info">
+                    <h4>${user.name}</h4>
+                    <p class="status">${user.online ? 'Online' : 'Offline'}</p>
+                </div>
+            `;
+            userElement.addEventListener('click', () => startNewChatWithUser(user.id));
+            contactsList.appendChild(userElement);
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+    }
 } 
