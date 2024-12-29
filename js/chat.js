@@ -27,22 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verzend bericht
     messageForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const messageInput = document.getElementById('messageInput');
         const message = messageInput.value.trim();
+        
         if (message && currentChat) {
-            try {
-                await db.collection('chats')
-                    .doc(currentChat)
-                    .collection('messages')
-                    .add({
-                        text: message,
-                        senderId: currentUser.uid,
-                        senderName: currentUser.displayName,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                messageInput.value = '';
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
+            await sendMessage(message);
         }
     });
 
@@ -133,6 +122,7 @@ function selectChat(chatId, userData) {
 
 // Start message listener
 function startMessageListener(chatId) {
+    // Stop vorige listener als die bestaat
     if (messageListener) {
         messageListener();
     }
@@ -140,6 +130,7 @@ function startMessageListener(chatId) {
     const messagesList = document.getElementById('messagesList');
     messagesList.innerHTML = '';
 
+    // Start nieuwe listener
     messageListener = db.collection('chats')
         .doc(chatId)
         .collection('messages')
@@ -147,9 +138,12 @@ function startMessageListener(chatId) {
         .onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === 'added') {
-                    displayMessage(change.doc.data());
+                    const messageData = change.doc.data();
+                    displayMessage(messageData);
                 }
             });
+        }, error => {
+            console.error("Error listening to messages:", error);
         });
 }
 
@@ -215,5 +209,26 @@ async function loadAllUsers() {
         });
     } catch (error) {
         console.error('Error loading users:', error);
+    }
+}
+
+async function sendMessage(text) {
+    if (!currentChat || !currentUser) return;
+
+    try {
+        await db.collection('chats')
+            .doc(currentChat)
+            .collection('messages')
+            .add({
+                text: text,
+                senderId: currentUser.uid,
+                senderName: currentUser.displayName,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        
+        // Clear input after successful send
+        document.getElementById('messageInput').value = '';
+    } catch (error) {
+        console.error('Error sending message:', error);
     }
 } 
