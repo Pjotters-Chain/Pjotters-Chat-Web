@@ -9,31 +9,22 @@ const firebaseConfig = {
 };
 
 // Initialiseer Firebase
-if (!firebase.apps.length) {
+if (!firebase.apps?.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
 // Firebase services
 const auth = firebase.auth();
 const db = firebase.firestore();
-const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
-const GoogleProvider = firebase.auth.GoogleAuthProvider;
 
-// Export functies
-const createUserWithEmailAndPassword = (email, password) => 
-    auth.createUserWithEmailAndPassword(email, password);
-const signInWithEmailAndPassword = (email, password) => 
-    auth.signInWithEmailAndPassword(email, password);
-const signInWithPopup = (provider) => 
-    auth.signInWithPopup(provider);
+// Maak de Firebase services beschikbaar in het window object
+window.auth = auth;
+window.db = db;
+window.firebase = firebase;
 
-// Exports
+// Exports voor modules die imports gebruiken
 export {
     auth,
     db,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleProvider,
-    serverTimestamp
+    firebase
 };
