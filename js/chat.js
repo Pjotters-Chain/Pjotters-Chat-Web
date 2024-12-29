@@ -146,4 +146,71 @@ function displayMessage(messageData) {
     
     messagesList.appendChild(messageElement);
     messagesList.scrollTop = messagesList.scrollHeight;
+}
+
+// Laad alle beschikbare gebruikers
+async function loadAvailableUsers() {
+    try {
+        const usersSnapshot = await db.collection('users')
+            .where('uid', '!=', currentUser.uid)
+            .get();
+        
+        const users = [];
+        usersSnapshot.forEach(doc => {
+            users.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        return users;
+    } catch (error) {
+        console.error('Error loading users:', error);
+        return [];
+    }
+}
+
+// Toon gebruikersselectie dialoog
+function showUserSelectionDialog(users) {
+    const dialog = document.createElement('div');
+    dialog.className = 'dialog-overlay';
+    dialog.innerHTML = `
+        <div class="dialog">
+            <h3>Selecteer een gebruiker</h3>
+            <div class="users-list">
+                ${users.map(user => `
+                    <div class="user-item" data-uid="${user.id}">
+                        <img src="${user.photoURL || '../images/default-avatar.png'}" alt="Profile">
+                        <span>${user.name}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <button class="button button-accent" onclick="this.parentElement.parentElement.remove()">Sluiten</button>
+        </div>
+    `;
+
+    // Event listeners voor gebruikersselectie
+    dialog.querySelectorAll('.user-item').forEach(item => {
+        item.addEventListener('click', async () => {
+            const selectedUserId = item.dataset.uid;
+            const chatId = await startNewChat(selectedUserId);
+            if (chatId) {
+                const userDoc = await db.collection('users').doc(selectedUserId).get();
+                const userData = userDoc.data();
+                selectChat(chatId, userData);
+                dialog.remove();
+            }
+        });
+    });
+
+    document.body.appendChild(dialog);
+}
+
+// Voeg deze helper functie toe voor timestamp formatting
+function formatTimestamp(timestamp) {
+    if (!timestamp) return '';
+    const date = timestamp.toDate();
+    return date.toLocaleTimeString('nl-NL', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
 } 
