@@ -518,3 +518,51 @@ textarea {
     background-color: var(--white);
     color: var(--text-color);
 }
+
+/* Theme Switcher */
+.theme-switch {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    border: none;
+}
+
+.theme-switch img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.theme-switch:hover img {
+    transform: rotate(30deg);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    --background-color: #1A1A1A;
+    --light-bg: #2D2D2D;
+    --text-color: #FFFFFF;
+    --text-light: #CCCCCC;
+    --white: #2D2D2D;
+    --border-color: #3D3D3D;
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+    --background-color: #FFFFFF;
+    --light-bg: #F7FAFC;
+    --text-color: #2D3748;
+    --text-light: #718096;
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;
+}
