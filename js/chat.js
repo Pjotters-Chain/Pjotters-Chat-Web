@@ -205,7 +205,75 @@ function showUserSelectionDialog(users) {
     document.body.appendChild(dialog);
 }
 
-// Voeg deze helper functie toe voor timestamp formatting
+// Voeg deze functie toe voor het laden van alle gebruikers
+async function loadAllUsers() {
+    try {
+        const usersSnapshot = await db.collection('users')
+            .where(firebase.firestore.FieldPath.documentId(), '!=', currentUser.uid)
+            .get();
+        
+        const users = [];
+        usersSnapshot.forEach(doc => {
+            users.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        
+        // Update contactenlijst
+        const contactsList = document.getElementById('contactsList');
+        users.forEach(user => {
+            const userElement = document.createElement('div');
+            userElement.className = 'contact-item';
+            userElement.innerHTML = `
+                <img src="${user.photoURL || '../images/default-avatar.png'}" alt="Profile">
+                <div class="contact-info">
+                    <h4>${user.name}</h4>
+                    <p class="status">${user.online ? 'Online' : 'Offline'}</p>
+                </div>
+            `;
+            userElement.addEventListener('click', () => startNewChatWithUser(user));
+            contactsList.appendChild(userElement);
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+    }
+}
+
+// Voeg deze functie toe voor het starten van een nieuwe chat
+async function startNewChatWithUser(otherUser) {
+    try {
+        // Controleer of er al een chat bestaat
+        const existingChat = await db.collection('chats')
+            .where('users', 'array-contains', currentUser.uid)
+            .get();
+
+        let existingChatId = null;
+        existingChat.forEach(doc => {
+            const chatData = doc.data();
+            if (chatData.users.includes(otherUser.id)) {
+                existingChatId = doc.id;
+            }
+        });
+
+        if (existingChatId) {
+            // Gebruik bestaande chat
+            selectChat(existingChatId, otherUser);
+        } else {
+            // Maak nieuwe chat
+            const chatRef = await db.collection('chats').add({
+                users: [currentUser.uid, otherUser.id],
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            selectChat(chatRef.id, otherUser);
+        }
+    } catch (error) {
+        console.error('Error starting chat:', error);
+    }
+}
+
+// Helper functie voor timestamp formatting
 function formatTimestamp(timestamp) {
     if (!timestamp) return '';
     const date = timestamp.toDate();
