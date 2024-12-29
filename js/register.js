@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if (typeof firebase === 'undefined') {
+        console.error('Firebase is niet geladen!');
+        return;
+    }
+
     const registerForm = document.getElementById('registerForm');
 
     registerForm.addEventListener('submit', async (e) => {
@@ -15,7 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            console.log('Start registratie...');
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            console.log('Gebruiker aangemaakt:', userCredential);
             
             await userCredential.user.updateProfile({
                 displayName: displayName
@@ -31,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             window.location.href = 'chat.html';
         } catch (error) {
+            console.error('Registratie error:', error);
             alert('Registratie mislukt: ' + error.message);
         }
     });
