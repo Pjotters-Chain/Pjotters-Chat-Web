@@ -90,17 +90,18 @@ function showUserSelectionDialog(users) {
 }
 
 // Start nieuwe chat met gebruiker
-async function startNewChatWithUser(otherUserId) {
+async function startNewChatWithUser(userId) {
     try {
-        const chatRef = await db.collection('chats').add({
-            users: [currentUser.uid, otherUserId],
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        const userDoc = await db.collection('users').doc(otherUserId).get();
-        const userData = userDoc.data();
-        
-        selectChat(chatRef.id, userData);
+        const chatId = await startNewChat(userId);
+        if (chatId) {
+            currentChat = chatId;
+            startMessageListener(chatId);
+            
+            // Update UI
+            const userDoc = await db.collection('users').doc(userId).get();
+            const userData = userDoc.data();
+            document.getElementById('currentChatName').textContent = userData.name;
+        }
     } catch (error) {
         console.error('Error starting chat:', error);
     }
@@ -122,13 +123,17 @@ function selectChat(chatId, userData) {
 
 // Start message listener
 function startMessageListener(chatId) {
-    // Stop vorige listener als die bestaat
+    // Stop vorige listener
     if (messageListener) {
         messageListener();
     }
 
     const messagesList = document.getElementById('messagesList');
-    messagesList.innerHTML = '';
+    messagesList.innerHTML = '';  // Maak berichtenlijst leeg
+
+    // Enable input velden
+    document.getElementById('messageInput').disabled = false;
+    document.getElementById('messageForm').querySelector('button').disabled = false;
 
     // Start nieuwe listener
     messageListener = db.collection('chats')
@@ -142,8 +147,6 @@ function startMessageListener(chatId) {
                     displayMessage(messageData);
                 }
             });
-        }, error => {
-            console.error("Error listening to messages:", error);
         });
 }
 
