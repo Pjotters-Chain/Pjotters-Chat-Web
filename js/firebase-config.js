@@ -1,11 +1,11 @@
 // Firebase configuratie
 const firebaseConfig = {
     apiKey: "AIzaSyA1HZbOAfP1b5OwSuqNVGgZ6LiqCm029LU",
-    authDomain: "pjotters-chat.firebaseapp.com",
-    projectId: "pjotters-chat",
-    storageBucket: "pjotters-chat.appspot.com",
-    messagingSenderId: "1066800578443",
-    appId: "1:1066800578443:web:c0a5c9b2e7d3b8f3b8d3b8"
+    authDomain: "pjotters-chat-web.firebaseapp.com",
+    projectId: "pjotters-chat-web",
+    storageBucket: "pjotters-chat-web.appspot.com",
+    messagingSenderId: "650802421900",
+    appId: "1:650802421900:web:your-app-id-here"
 };
 
 // Direct initialiseren
