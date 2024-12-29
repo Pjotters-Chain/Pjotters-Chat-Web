@@ -1,20 +1,3 @@
-// Import de benodigde Firebase functies
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    updateProfile 
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { 
-    getFirestore,
-    doc,
-    setDoc,
-    serverTimestamp 
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
 // Firebase configuratie
 const firebaseConfig = {
     apiKey: "AIzaSyDGPRGVGHtGZGXEtLGQJtPvxNHiXXBPVGE",
@@ -26,20 +9,31 @@ const firebaseConfig = {
 };
 
 // Initialiseer Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
-// Exporteer alles wat we nodig hebben in andere bestanden
+// Firebase services
+const auth = firebase.auth();
+const db = firebase.firestore();
+const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+const GoogleProvider = firebase.auth.GoogleAuthProvider;
+
+// Export functies
+const createUserWithEmailAndPassword = (email, password) => 
+    auth.createUserWithEmailAndPassword(email, password);
+const signInWithEmailAndPassword = (email, password) => 
+    auth.signInWithEmailAndPassword(email, password);
+const signInWithPopup = (provider) => 
+    auth.signInWithPopup(provider);
+
+// Exports
 export {
     auth,
     db,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signInWithPopup,
-    GoogleAuthProvider,
-    updateProfile,
-    doc,
-    setDoc,
+    GoogleProvider,
     serverTimestamp
 };
