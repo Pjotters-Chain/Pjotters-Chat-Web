@@ -92,15 +92,39 @@ function showUserSelectionDialog(users) {
 // Start nieuwe chat met gebruiker
 async function startNewChatWithUser(userId) {
     try {
-        const chatId = await startNewChat(userId);
+        // Controleer eerst of er al een chat bestaat met deze gebruiker
+        const existingChat = await db.collection('chats')
+            .where('users', 'array-contains', currentUser.uid)
+            .get();
+
+        let chatId = null;
+        
+        existingChat.forEach(doc => {
+            const chatData = doc.data();
+            if (chatData.users.includes(userId)) {
+                chatId = doc.id;
+            }
+        });
+
+        // Als er geen bestaande chat is, maak een nieuwe
+        if (!chatId) {
+            chatId = await startNewChat(userId);
+        }
+
         if (chatId) {
             currentChat = chatId;
-            startMessageListener(chatId);
             
             // Update UI
             const userDoc = await db.collection('users').doc(userId).get();
             const userData = userDoc.data();
             document.getElementById('currentChatName').textContent = userData.name;
+            
+            // Enable input
+            document.getElementById('messageInput').disabled = false;
+            document.getElementById('messageForm').querySelector('button').disabled = false;
+            
+            // Start message listener
+            startMessageListener(chatId);
         }
     } catch (error) {
         console.error('Error starting chat:', error);
