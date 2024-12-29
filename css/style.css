@@ -3,15 +3,13 @@
     --primary-color: #4A90E2;      /* Helder blauw */
     --secondary-color: #5C6AC4;    /* Zacht paars-blauw */
     --accent-color: #FF6B6B;       /* Zacht rood */
-    --text-color: #2D3748;         /* Donker grijs voor tekst */
-    --text-light: #718096;         /* Lichter grijs voor subtekst */
     --background-color: #FFFFFF;    /* Wit */
     --light-bg: #F7FAFC;           /* Heel licht grijs */
-    --white: #FFFFFF;
+    --text-color: #2D3748;         /* Donker grijs voor tekst */
+    --text-light: #718096;         /* Lichter grijs voor subtekst */
+    --white: #FFFFFF;              /* Wit */
     --border-color: #E2E8F0;       /* Licht grijs voor randen */
     --shadow: 0 2px 15px rgba(0,0,0,0.05);
-    --border-radius: 8px;
-    --transition: all 0.3s ease;
 }
 
 /* Reset & Basis */
@@ -202,19 +200,13 @@ nav {
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
     :root {
-        --white: #1a1a1a;
-        --light-bg: #2c2c2c;
-        --text-color: #fff;
+        --white: #FFFFFF;
+        --light-bg: #F7FAFC;
+        --text-color: #2D3748;
     }
 
     body {
-        background: #121212;
-    }
-
-    input, 
-    textarea {
-        background: #2c2c2c;
-        color: var(--text-color);
+        background: var(--background-color);
     }
 }
 
@@ -511,4 +503,18 @@ footer {
     background: var(--light-bg);
     border-top: 1px solid var(--border-color);
     color: var(--text-light);
+}
+
+/* Voeg deze stijlen toe voor input velden */
+input, 
+textarea {
+    background-color: var(--white) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Voeg deze stijl toe voor de login box */
+.login-box {
+    background-color: var(--white);
+    color: var(--text-color);
 }
