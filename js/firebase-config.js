@@ -1,11 +1,11 @@
 // Firebase configuratie
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-app.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-app.appspot.com",
-    messagingSenderId: "your-messaging-sender-id",
-    appId: "your-app-id"
+    apiKey: "AIzaSyDGPRGVGHtGZGXEtLGQJtPvxNHiXXBPVGE",
+    authDomain: "pjotters-chat.firebaseapp.com",
+    projectId: "pjotters-chat",
+    storageBucket: "pjotters-chat.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abc123def456"
 };
 
 // Initialiseer Firebase
