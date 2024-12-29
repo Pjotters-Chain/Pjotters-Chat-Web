@@ -1,6 +1,6 @@
 // Firebase configuratie
 const firebaseConfig = {
-    apiKey: "AIzaSyDGPRGVGHtGZGXEtLGQJtPvxNHiXXBPVGE",
+    apiKey: "AIzaSyA1HZbOAfP1b5OwSuqNVGgZ6LiqCm029LU",
     authDomain: "pjotters-chat.firebaseapp.com",
     projectId: "pjotters-chat",
     storageBucket: "pjotters-chat.appspot.com",
