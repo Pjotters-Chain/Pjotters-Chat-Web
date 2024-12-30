@@ -275,12 +275,30 @@ function startUserListener() {
     if (!user) return;
 
     // Luister naar gebruikerswijzigingen
-    db.collection('users').doc(user.uid)
+    return db.collection('users').doc(user.uid)
         .onSnapshot(doc => {
             const userData = doc.data();
             if (userData) {
-                document.getElementById('userName').textContent = userData.name;
-                document.getElementById('userAvatar').src = userData.photoURL || '../images/default-avatar.png';
+                // Update alle UI elementen die de gebruikersnaam tonen
+                const userNameElements = document.querySelectorAll('.user-name, #userName');
+                userNameElements.forEach(element => {
+                    element.textContent = userData.name;
+                });
+
+                // Update alle avatar elementen
+                const avatarElements = document.querySelectorAll('.user-avatar, #userAvatar');
+                avatarElements.forEach(element => {
+                    element.src = userData.photoURL || '../images/default-avatar.png';
+                });
+
+                // Update huidige gebruiker object
+                currentUser = {
+                    ...currentUser,
+                    displayName: userData.name,
+                    photoURL: userData.photoURL
+                };
             }
+        }, error => {
+            console.error('Error in user listener:', error);
         });
 } 
