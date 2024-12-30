@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (user.photoURL) {
                 document.getElementById('userAvatar').src = user.photoURL;
             }
+            
+            // Start de user listener om updates te ontvangen
+            startUserListener();
+            
             await loadAllUsers();
         } else {
             window.location.href = '../pages/login.html';
@@ -275,30 +279,29 @@ function startUserListener() {
     if (!user) return;
 
     // Luister naar gebruikerswijzigingen
-    return db.collection('users').doc(user.uid)
-        .onSnapshot(doc => {
+    db.collection('users').doc(user.uid)
+        .onSnapshot(async (doc) => {
             const userData = doc.data();
             if (userData) {
-                // Update alle UI elementen die de gebruikersnaam tonen
-                const userNameElements = document.querySelectorAll('.user-name, #userName');
-                userNameElements.forEach(element => {
-                    element.textContent = userData.name;
+                // Update Firebase Auth profile
+                await user.updateProfile({
+                    displayName: userData.name,
+                    photoURL: userData.photoURL
                 });
 
-                // Update alle avatar elementen
-                const avatarElements = document.querySelectorAll('.user-avatar, #userAvatar');
-                avatarElements.forEach(element => {
-                    element.src = userData.photoURL || '../images/default-avatar.png';
-                });
+                // Update alle UI elementen
+                const userNameElements = document.querySelectorAll('#userName, .current-user-name');
+                userNameElements.forEach(el => el.textContent = userData.name);
 
-                // Update huidige gebruiker object
+                const userAvatarElements = document.querySelectorAll('#userAvatar, .current-user-avatar');
+                userAvatarElements.forEach(el => el.src = userData.photoURL || '../images/default-avatar.png');
+
+                // Update currentUser object
                 currentUser = {
-                    ...currentUser,
+                    ...user,
                     displayName: userData.name,
                     photoURL: userData.photoURL
                 };
             }
-        }, error => {
-            console.error('Error in user listener:', error);
         });
 } 
