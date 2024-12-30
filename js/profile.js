@@ -56,14 +56,30 @@ async function updateProfile() {
     if (!user) return;
 
     try {
+        const newName = document.getElementById('displayName').value;
+        const newStatus = document.getElementById('status').value;
+        const newBio = document.getElementById('bio').value;
+
+        // Update Firestore
         await db.collection('users').doc(user.uid).update({
-            name: document.getElementById('displayName').value,
-            status: document.getElementById('status').value,
-            bio: document.getElementById('bio').value,
+            name: newName,
+            status: newStatus,
+            bio: newBio,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
+        // Update Firebase Auth profile
+        await user.updateProfile({
+            displayName: newName
+        });
+
+        // Update UI
+        document.getElementById('userName').textContent = newName;
+
         alert('Profiel bijgewerkt!');
+        
+        // Refresh de pagina om alle wijzigingen door te voeren
+        window.location.reload();
     } catch (error) {
         console.error('Error updating profile:', error);
         alert('Fout bij het bijwerken van het profiel');
