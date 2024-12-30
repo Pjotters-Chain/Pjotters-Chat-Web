@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profiel - Pjotters Chat</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../images/Pjotters-Chain_Logo.png">
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <img src="../images/Pjotters-Chain_Logo.png" alt="Pjotters Logo" height="40">
+            </div>
+            <div class="nav-right">
+                <a href="chat.html" class="button button-primary">Terug naar Chat</a>
+                <button id="logoutBtn" class="button button-accent">Uitloggen</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar-container">
+                <img id="profileAvatar" src="../images/default-avatar.png" alt="Profiel foto">
+                <button id="changeAvatarBtn" class="button button-primary">Foto wijzigen</button>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none">
+            </div>
+            <div class="profile-info">
+                <h2>Profiel Instellingen</h2>
+            </div>
+        </div>
+
+        <form id="profileForm" class="profile-form">
+            <div class="form-group">
+                <label for="displayName">Naam</label>
+                <input type="text" id="displayName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" placeholder="Wat doe je nu?">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" rows="4" placeholder="Vertel iets over jezelf"></textarea>
+            </div>
+
+            <button type="submit" class="button button-primary">Opslaan</button>
+        </form>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/auth-check.js"></script>
+<script src="../js/profile.js"></script>
+</body>
+</html> 
