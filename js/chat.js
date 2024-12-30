@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', () => {
         firebase.auth().signOut();
     });
+
+    startUserListener();
 });
 
 // Toon gebruikersselectie dialoog
@@ -197,12 +199,11 @@ function formatTimestamp(timestamp) {
 }
 
 // Laad alle gebruikers
-async function loadAllUsers() {
-    try {
-        const usersSnapshot = await db.collection('users').get();
+function loadAllUsers() {
+    // Luister naar alle gebruikers
+    db.collection('users').onSnapshot(snapshot => {
         const users = [];
-        usersSnapshot.forEach(doc => {
-            // Voeg alleen andere gebruikers toe (niet de huidige gebruiker)
+        snapshot.forEach(doc => {
             if (doc.id !== currentUser.uid) {
                 users.push({
                     id: doc.id,
@@ -212,25 +213,27 @@ async function loadAllUsers() {
         });
 
         // Update contactenlijst
-        const contactsList = document.getElementById('contactsList');
-        contactsList.innerHTML = ''; // Maak lijst leeg
+        updateContactsList(users);
+    });
+}
 
-        users.forEach(user => {
-            const userElement = document.createElement('div');
-            userElement.className = 'contact-item';
-            userElement.innerHTML = `
-                <img src="${user.photoURL || '../images/default-avatar.png'}" alt="Profile">
-                <div class="contact-info">
-                    <h4>${user.name}</h4>
-                    <p class="status">${user.online ? 'Online' : 'Offline'}</p>
-                </div>
-            `;
-            userElement.addEventListener('click', () => startNewChatWithUser(user.id));
-            contactsList.appendChild(userElement);
-        });
-    } catch (error) {
-        console.error('Error loading users:', error);
-    }
+function updateContactsList(users) {
+    const contactsList = document.getElementById('contactsList');
+    contactsList.innerHTML = '';
+
+    users.forEach(user => {
+        const userElement = document.createElement('div');
+        userElement.className = 'contact-item';
+        userElement.innerHTML = `
+            <img src="${user.photoURL || '../images/default-avatar.png'}" alt="Profile">
+            <div class="contact-info">
+                <h4>${user.name}</h4>
+                <p class="status">${user.online ? 'Online' : 'Offline'}</p>
+            </div>
+        `;
+        userElement.addEventListener('click', () => startNewChatWithUser(user.id));
+        contactsList.appendChild(userElement);
+    });
 }
 
 async function sendMessage(text) {
@@ -265,4 +268,19 @@ async function startNewChat(userId) {
         console.error('Error starting new chat:', error);
         return null;
     }
+}
+
+function startUserListener() {
+    const user = firebase.auth().currentUser;
+    if (!user) return;
+
+    // Luister naar gebruikerswijzigingen
+    db.collection('users').doc(user.uid)
+        .onSnapshot(doc => {
+            const userData = doc.data();
+            if (userData) {
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userAvatar').src = userData.photoURL || '../images/default-avatar.png';
+            }
+        });
 } 
