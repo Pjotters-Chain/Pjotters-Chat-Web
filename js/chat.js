@@ -92,16 +92,34 @@ function showUserSelectionDialog(users) {
 // Start nieuwe chat met gebruiker
 async function startNewChatWithUser(userId) {
     try {
-        const chatId = await startNewChat(userId);
-        if (chatId) {
-            currentChat = chatId;
-            startMessageListener(chatId);
-            
-            // Update UI
-            const userDoc = await db.collection('users').doc(userId).get();
-            const userData = userDoc.data();
-            document.getElementById('currentChatName').textContent = userData.name;
-        }
+        // Haal gebruikersgegevens op
+        const userDoc = await db.collection('users').doc(userId).get();
+        const userData = userDoc.data();
+
+        // Zoek bestaande chat
+        const chatsSnapshot = await db.collection('chats')
+            .where('users', 'array-contains', currentUser.uid)
+            .get();
+
+        let existingChatId = null;
+        chatsSnapshot.forEach(doc => {
+            if (doc.data().users.includes(userId)) {
+                existingChatId = doc.id;
+            }
+        });
+
+        // Gebruik bestaande chat of maak nieuwe aan
+        const chatId = existingChatId || await startNewChat(userId);
+        
+        // Update UI en start chat
+        currentChat = chatId;
+        document.getElementById('currentChatName').textContent = userData.name;
+        document.getElementById('messageInput').disabled = false;
+        document.getElementById('messageForm').querySelector('button').disabled = false;
+        
+        // Start message listener
+        startMessageListener(chatId);
+        
     } catch (error) {
         console.error('Error starting chat:', error);
     }
@@ -233,5 +251,18 @@ async function sendMessage(text) {
         document.getElementById('messageInput').value = '';
     } catch (error) {
         console.error('Error sending message:', error);
+    }
+}
+
+async function startNewChat(userId) {
+    try {
+        const chatRef = await db.collection('chats').add({
+            users: [currentUser.uid, userId],
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        return chatRef.id;
+    } catch (error) {
+        console.error('Error starting new chat:', error);
+        return null;
     }
 } 
