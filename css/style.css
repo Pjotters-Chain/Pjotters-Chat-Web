@@ -756,23 +756,18 @@ textarea {
 
 .video-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
+    top: 100px;
+    left: 100px;
+    right: 100px;
+    bottom: 100px;
     overflow: hidden;
+    z-index: -1;
+    border-radius: 15px;
 }
 
 .video-container video {
-    position: absolute;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -828,4 +823,40 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
+}
+
+.sidebar-section {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.sidebar-section h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.functions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.functions-list li {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.functions-list li:hover {
+    background: #e9ecef;
+}
+
+.functions-list i {
+    margin-right: 10px;
+    color: #3498db;
 }
